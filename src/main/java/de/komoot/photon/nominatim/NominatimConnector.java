@@ -49,6 +49,9 @@ public class NominatimConnector {
 
 			Geometry geometry = DBUtils.extractGeometry(rs, "bbox");
 			Envelope envelope = geometry != null ? geometry.getEnvelopeInternal() : null;
+			
+			Geometry polygon = DBUtils.extractGeometry(rs, "polygon");
+			
 
 			PhotonDoc doc = new PhotonDoc(
 					rs.getLong("place_id"),
@@ -60,6 +63,7 @@ public class NominatimConnector {
 					rs.getString("housenumber"),
 					DBUtils.getMap(rs, "extratags"),
 					envelope,
+					polygon,
 					rs.getLong("parent_place_id"),
 					importance,
 					CountryCode.getByCode(rs.getString("calculated_country_code")),
@@ -72,7 +76,7 @@ public class NominatimConnector {
 			return doc;
 		}
 	};
-	private final String selectColsPlaceX = "place_id, osm_type, osm_id, class, type, name, housenumber, postcode, extratags, ST_Envelope(geometry) AS bbox, parent_place_id, linked_place_id, rank_search, importance, calculated_country_code, centroid";
+	private final String selectColsPlaceX = "place_id, osm_type, osm_id, class, type, name, housenumber, postcode, extratags, ST_Envelope(geometry) AS bbox, ST_AsText AS polygon, parent_place_id, linked_place_id, rank_search, importance, calculated_country_code, centroid";
 	private Importer importer;
 
 	private Map<String, String> getCountryNames(String countrycode) {
@@ -145,7 +149,7 @@ public class NominatimConnector {
 		});
 	}
 
-	private static final PhotonDoc FINAL_DOCUMENT = new PhotonDoc(0, null, 0, null, null, null, null, null, null, 0, 0, null, null, 0, 0);
+	private static final PhotonDoc FINAL_DOCUMENT = new PhotonDoc(0, null, 0, null, null, null, null, null, null, null, 0, 0, null, null, 0, 0);
 
 	private class ImportThread implements Runnable {
 		private final BlockingQueue<PhotonDoc> documents;

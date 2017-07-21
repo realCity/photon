@@ -14,11 +14,16 @@ public class ReverseRequest implements Serializable {
     private Integer limit;
     private String queryStringFilter;
     private Boolean locationDistanceSort = true;
+    private Boolean searchExtend = false;
+    private Boolean searchPolygon = false;
+    
 
-    public ReverseRequest(Point location, String language, Double radius, String queryStringFilter, Integer limit, Boolean locationDistanceSort){
+    public ReverseRequest(Point location, String language, Double radius, Boolean searchExtend, Boolean searchPolygon, String queryStringFilter, Integer limit, Boolean locationDistanceSort){
         this.location = location;
         this.language = language;
         this.radius = radius;
+        this.searchExtend = searchExtend;
+        this.searchPolygon = searchPolygon;
         this.limit = limit;
         this.queryStringFilter = queryStringFilter;
         this.locationDistanceSort = locationDistanceSort;
@@ -34,6 +39,14 @@ public class ReverseRequest implements Serializable {
 
     public Double getRadius() {
         return radius;
+    }
+    
+    public Boolean getSearchExtend() {
+        return searchExtend;
+    }
+    
+    public Boolean getSearchPolygon() {
+        return searchPolygon;
     }
 
     public Integer getLimit() {

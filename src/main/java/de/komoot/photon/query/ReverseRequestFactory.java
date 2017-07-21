@@ -69,6 +69,31 @@ public class ReverseRequestFactory {
             }
         }
         
+        Boolean searchExtend = false;
+        try {
+            if(webRequest.queryParams("searchExtend") == null)
+                searchExtend = false;
+            else
+                searchExtend = Boolean.valueOf(webRequest.queryParams("searchExtend"));
+            
+        } catch (Exception nfe) {
+            //ignore
+        }
+        
+        Boolean searchPolygon = false;
+        try {
+            if(webRequest.queryParams("searchPolygon") == null)
+                searchPolygon = false;
+            else
+                searchPolygon = Boolean.valueOf(webRequest.queryParams("searchPolygon"));
+            
+        } catch (Exception nfe) {
+            //ignore
+        }
+        
+        
+        
+        
         String queryStringFilter = webRequest.queryParams("queryStringFilter");
         
         Boolean locationDistanceSort = true;
@@ -100,7 +125,7 @@ public class ReverseRequestFactory {
         
                 
                 
-        ReverseRequest reverseRequest = new ReverseRequest(location, language, radius, queryStringFilter, limit, locationDistanceSort);
+        ReverseRequest reverseRequest = new ReverseRequest(location, language, radius, searchExtend, searchPolygon, queryStringFilter, limit, locationDistanceSort);
         
         return (R) reverseRequest;
     }

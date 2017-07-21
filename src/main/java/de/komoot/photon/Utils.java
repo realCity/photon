@@ -3,7 +3,10 @@ package de.komoot.photon;
 import com.google.common.base.Joiner;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.SetMultimap;
+import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Envelope;
+import com.vividsolutions.jts.geom.Geometry;
+
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.common.xcontent.XContentFactory;
 
@@ -51,6 +54,7 @@ public class Utils {
 		writeIntlNames(builder, doc.getStreet(), "street", languages);
 		writeContext(builder, doc.getContext(), languages);
 		writeExtent(builder, doc.getBbox());
+		writePolygon(builder, doc.getPolygon());
 
 		builder.endObject();
 		
@@ -58,7 +62,25 @@ public class Utils {
 		return builder;
 	}
 
-	private static void writeExtent(XContentBuilder builder, Envelope bbox) throws IOException {
+	private static void writePolygon(XContentBuilder builder, Geometry polygon) throws IOException {
+        if(polygon == null) return;
+
+
+        // http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/mapping-geo-shape-type.html#_envelope
+        builder.startObject("polygon");
+        builder.field("type", "linestring");
+
+        builder.startArray("coordinates");
+        for(Coordinate coordinate : polygon.getCoordinates()) {
+            builder.startArray().value(coordinate.x).value(coordinate.y).endArray();
+        }
+
+        builder.endArray();
+        builder.endObject();
+        
+    }
+
+    private static void writeExtent(XContentBuilder builder, Envelope bbox) throws IOException {
 		if(bbox == null) return;
 
 		if(bbox.getArea() == 0.) return;
