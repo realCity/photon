@@ -18,7 +18,7 @@ public class ReverseRequestFactory {
     private final LanguageChecker languageChecker;
     private final static GeometryFactory geometryFactory = new GeometryFactory(new PrecisionModel(), 4326);
     
-    protected static HashSet<String> m_hsRequestQueryParams = new HashSet<>(Arrays.asList("lang", "lon", "lat", "radius", "queryStringFilter", "distanceSort", "limit"));
+    protected static HashSet<String> m_hsRequestQueryParams = new HashSet<>(Arrays.asList("lang", "lon", "lat", "radius", "query_string_filter", "distance_sort", "limit"));
 
     public ReverseRequestFactory(Set<String> supportedLanguages) {
         this.languageChecker = new LanguageChecker(supportedLanguages);
@@ -71,10 +71,10 @@ public class ReverseRequestFactory {
         
         Boolean searchExtend = false;
         try {
-            if(webRequest.queryParams("searchExtend") == null)
+            if(webRequest.queryParams("search_extend") == null)
                 searchExtend = false;
             else
-                searchExtend = Boolean.valueOf(webRequest.queryParams("searchExtend"));
+                searchExtend = Boolean.valueOf(webRequest.queryParams("search_extend"));
             
         } catch (Exception nfe) {
             //ignore
@@ -85,7 +85,7 @@ public class ReverseRequestFactory {
             if(webRequest.queryParams("searchPolygon") == null)
                 searchPolygon = false;
             else
-                searchPolygon = Boolean.valueOf(webRequest.queryParams("searchPolygon"));
+                searchPolygon = Boolean.valueOf(webRequest.queryParams("search_polygon"));
             
         } catch (Exception nfe) {
             //ignore
@@ -94,14 +94,14 @@ public class ReverseRequestFactory {
         
         
         
-        String queryStringFilter = webRequest.queryParams("queryStringFilter");
+        String queryStringFilter = webRequest.queryParams("query_string_filter");
         
         Boolean locationDistanceSort = true;
         try {
-            if(webRequest.queryParams("distanceSort") == null)
+            if(webRequest.queryParams("distance_sort") == null)
                 locationDistanceSort = true;
             else
-                locationDistanceSort = Boolean.valueOf(webRequest.queryParams("distanceSort"));
+                locationDistanceSort = Boolean.valueOf(webRequest.queryParams("distance_sort"));
             
         } catch (Exception nfe) {
             //ignore

@@ -1,7 +1,5 @@
 package de.komoot.photon.query;
 
-
-
 import com.google.common.collect.ImmutableSet;
 import com.vividsolutions.jts.geom.Point;
 import java.util.Map;
@@ -10,17 +8,13 @@ import java.util.Set;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
-import org.apache.lucene.index.Fields;
 import org.elasticsearch.common.unit.DistanceUnit;
-
-
 
 /**
  *
  * @author svantulden
  */
-public class ReverseQueryBuilder implements TagFilterQueryBuilder
-{
+public class ReverseQueryBuilder implements TagFilterQueryBuilder {
     private Integer limit;
 
     private Double radius;
