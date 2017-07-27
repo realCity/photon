@@ -76,7 +76,8 @@ public class NominatimConnector {
 			return doc;
 		}
 	};
-	private final String selectColsPlaceX = "place_id, osm_type, osm_id, class, type, name, housenumber, postcode, extratags, ST_Envelope(geometry) AS bbox, ST_AsText AS polygon, parent_place_id, linked_place_id, rank_search, importance, calculated_country_code, centroid";
+	private final String selectColsPlaceX = "place_id, osm_type, osm_id, class, type, name, housenumber, postcode, extratags, ST_Envelope(geometry) AS bbox, "
+	        + "ST_AsText(geometry) AS polygon, parent_place_id, linked_place_id, rank_search, importance, calculated_country_code, centroid";
 	private Importer importer;
 
 	private Map<String, String> getCountryNames(String countrycode) {
