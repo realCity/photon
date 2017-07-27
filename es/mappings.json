@@ -229,7 +229,7 @@
 				{
 					"coordinates":
 					{
-						"type": "geo_shape"
+						"type": "geo_point"
 					}
 				}
 			},
@@ -433,7 +433,7 @@
 			},
 			"polygon":
 			{
-				"type": "geo_shape"
+				"type": "geo_point"
 			},
 			"postcode":
 			{
