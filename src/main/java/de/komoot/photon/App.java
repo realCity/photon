@@ -123,7 +123,7 @@ public class App {
         try {
             nominatimConnector.readEntireDatabase();
         } catch(Exception e) {
-            log.info("error importing from nominatim: " + e.getMessage());
+            log.error("error importing from nominatim", e);
         }
 
         log.info("imported data from nominatim to photon with languages: " + args.getLanguages());
