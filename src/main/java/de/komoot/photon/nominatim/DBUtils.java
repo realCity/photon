@@ -1,14 +1,18 @@
 package de.komoot.photon.nominatim;
 
-import com.vividsolutions.jts.geom.Geometry;
-import com.google.common.collect.Maps;
-import org.openstreetmap.osmosis.hstore.PGHStore;
-import org.postgis.jts.JtsGeometry;
-
-import javax.annotation.Nullable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Map;
+
+import javax.annotation.Nullable;
+
+import org.openstreetmap.osmosis.hstore.PGHStore;
+import org.postgis.jts.JtsGeometry;
+
+import com.google.common.collect.Maps;
+import com.vividsolutions.jts.geom.Geometry;
+import com.vividsolutions.jts.io.ParseException;
+import com.vividsolutions.jts.io.WKTReader;
 
 /**
  * utility functions to parse data from postgis
@@ -16,6 +20,9 @@ import java.util.Map;
  * @author christoph
  */
 public class DBUtils {
+    
+    static public final WKTReader wktReader = new WKTReader(); 
+    
 	public static Map<String, String> getMap(ResultSet rs, String columnName) throws SQLException {
 		Map<String, String> tags = Maps.newHashMap();
 
@@ -31,11 +38,29 @@ public class DBUtils {
 
 	@Nullable
 	public static <T extends Geometry> T extractGeometry(ResultSet rs, String columnName) throws SQLException {
-		JtsGeometry geom = (JtsGeometry) rs.getObject(columnName);
-		if(geom == null) {
-			//info("no geometry found in column " + columnName);
-			return null;
-		}
-		return (T) geom.getGeometry();
+	    
+	    Object geom = rs.getObject(columnName);
+	    try
+	    {
+    		
+    		if(geom == null) {
+    			//info("no geometry found in column " + columnName);
+    			return null;
+    		}
+    		else if(geom instanceof JtsGeometry) {
+    		    return (T) ((JtsGeometry)geom).getGeometry();
+    		}
+    		else {
+    		    if(geom.toString().trim().length() == 0)
+    		        return null;
+    		    else
+    		        return (T) wktReader.read(geom.toString());
+            }
+	    }
+	    catch(ParseException e) {
+	        throw new RuntimeException(e);   
+	    }
 	}
+	
+
 }

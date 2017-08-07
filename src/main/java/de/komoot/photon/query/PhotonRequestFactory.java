@@ -63,11 +63,14 @@ public class PhotonRequestFactory {
         } catch (Exception nfe) {
             //ignore
         }
+        
+        
+        
         QueryParamsMap tagFiltersQueryMap = webRequest.queryMap("osm_tag");
         if (!new CheckIfFilteredRequest().execute(tagFiltersQueryMap)) {
-            return (R) new PhotonRequest(query, limit, locationForBias, locationDistanceSort, language);
+            return (R) new PhotonRequest(query, limit, locationForBias, locationDistanceSort, language, false);
         }
-        FilteredPhotonRequest photonRequest = new FilteredPhotonRequest(query, limit, locationForBias, locationDistanceSort, language);
+        FilteredPhotonRequest photonRequest = new FilteredPhotonRequest(query, limit, locationForBias, locationDistanceSort, language, false);
         String[] tagFilters = tagFiltersQueryMap.values();
         setUpTagFilters(photonRequest, tagFilters);
         

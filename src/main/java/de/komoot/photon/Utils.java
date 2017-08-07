@@ -66,13 +66,16 @@ public class Utils {
         if(polygon == null) return;
 
 
+        // we now have the type 'geopoint' - geoshape was not possible in embedded mode for some strange error messages - at the end embedded isn't supported anymore
         // http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/mapping-geo-shape-type.html#_envelope
         builder.startObject("polygon");
-        builder.field("type", "linestring");
-
+        
         builder.startArray("coordinates");
         for(Coordinate coordinate : polygon.getCoordinates()) {
-            builder.startArray().value(coordinate.x).value(coordinate.y).endArray();
+            builder.startObject()
+            .field("lat", coordinate.y)
+            .field("lon", coordinate.x)
+            .endObject();
         }
 
         builder.endArray();

@@ -25,12 +25,16 @@ public class ReverseElasticsearchSearcher implements ElasticsearchReverseSearche
 
     @Override
     public SearchResponse search(QueryBuilder queryBuilder, Integer limit, Point location,
-	    Boolean locationDistanceSort) {
+	    Boolean locationDistanceSort, Boolean searchPolygon) {
 	TimeValue timeout = TimeValue.timeValueSeconds(7);
 
 	SearchRequestBuilder builder = client.prepareSearch("photon").setSearchType(SearchType.QUERY_AND_FETCH)
 		.setQuery(queryBuilder).setSize(limit).setTimeout(timeout);
 
+	if (searchPolygon&&locationDistanceSort)
+        builder.addSort(SortBuilders.geoDistanceSort("polygon.coordinates", new GeoPoint(location.getY(), location.getX()))
+            .order(SortOrder.ASC));
+	
 	if (locationDistanceSort)
 	    builder.addSort(SortBuilders.geoDistanceSort("coordinate", new GeoPoint(location.getY(), location.getX()))
 		    .order(SortOrder.ASC));

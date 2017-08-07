@@ -99,6 +99,12 @@ http://localhost:2322/api?q=berlin&lon=10&lat=52
 #### Reverse geocode a coordinate
 ```
 http://localhost:2322/reverse?lon=10&lat=52
+With radius in km and adapted number of results.
+http://localhost:2322/reverse?lat=49.4179517&lon=7.7486834&radius=0.40&limit=2
+Searching and sorting also with polygon points for enhanced accuracy, relevant when searching e.g. for ways. Also returning those polygon points.
+http://localhost:2322/reverse?lat=49.4179517&lon=7.7486834&radius=0.40&limit=2&search_polygon=true&return_polygon=true
+Filter arbitrary with attribute-value (elasticsearch) query syntax.
+http://localhost:2322/reverse?lat=49.4179517&lon=7.7486834&radius=0.40&limit=2&query_string_filter=osm_key:highway
 ```
 
 #### Adapt Number of Results

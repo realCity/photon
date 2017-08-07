@@ -8,6 +8,8 @@ import org.elasticsearch.client.Client;
 import org.elasticsearch.client.Requests;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 
+import com.vividsolutions.jts.geom.Geometry;
+
 import de.komoot.photon.PhotonDoc;
 import de.komoot.photon.Utils;
 import lombok.extern.slf4j.Slf4j;

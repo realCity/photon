@@ -27,7 +27,7 @@ public abstract class AbstractPhotonRequestHandler<R extends PhotonRequest> impl
         if (results.getHits().getTotalHits() == 0) {
             results = elasticsearchSearcher.search(queryBuilder.withLenientMatch().buildQuery(), limit);
         }
-        List<JSONObject> resultJsonObjects = new ConvertToJson(photonRequest.getLanguage()).convert(results);
+        List<JSONObject> resultJsonObjects = new ConvertToJson(photonRequest.getLanguage(), photonRequest.getReturnPolygon()).convert(results);
         StreetDupesRemover streetDupesRemover = new StreetDupesRemover(photonRequest.getLanguage());
         resultJsonObjects = streetDupesRemover.execute(resultJsonObjects);
         if (resultJsonObjects.size() > limit) {

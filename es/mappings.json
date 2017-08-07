@@ -433,7 +433,13 @@
 			},
 			"polygon":
 			{
-				"type": "geo_point"
+				"properties":
+				{
+					"coordinates":
+					{
+						"type": "geo_point"
+					}
+				}
 			},
 			"postcode":
 			{

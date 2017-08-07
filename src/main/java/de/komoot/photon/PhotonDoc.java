@@ -29,7 +29,7 @@ public class PhotonDoc {
 	private String postcode;
 	final private Map<String, String> extratags;
 	final private Envelope bbox;
-	final private Geometry polygon;
+	private Geometry polygon;
 	final private long parentPlaceId; // 0 if unset
 	final private double importance;
 	final private CountryCode countryCode;

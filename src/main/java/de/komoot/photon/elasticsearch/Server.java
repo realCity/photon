@@ -245,7 +245,6 @@ public class Server
         JSONObject mappingsJSON = new JSONObject(mappingsString);
 
         // add all langs to the mapping
-        //TODO wieder zurück
         mappingsJSON = addLangsToMapping(mappingsJSON);
         client.admin().indices().prepareCreate("photon").setSettings(IOUtils.toString(index_settings)).execute().actionGet();
         client.admin().indices().preparePutMapping("photon").setType("place").setSource(mappingsJSON.toString()).execute().actionGet();

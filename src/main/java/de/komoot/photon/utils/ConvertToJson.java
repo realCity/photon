@@ -8,8 +8,11 @@ import org.elasticsearch.search.SearchHit;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 /**
  * Convert a elasticsearch {@link SearchResponse} into a list of {@link JSONObject}s
@@ -21,9 +24,11 @@ public class ConvertToJson implements OneWayConverter<SearchResponse, List<JSONO
     private final static String[] KEYS_LANG_UNSPEC = {Constants.OSM_ID, Constants.OSM_VALUE, Constants.OSM_KEY, Constants.POSTCODE, Constants.HOUSENUMBER, Constants.OSM_TYPE};
     private final static String[] KEYS_LANG_SPEC = {Constants.NAME, Constants.COUNTRY, Constants.CITY, Constants.STREET, Constants.STATE};
     private final String lang;
+    private final Boolean returnPolygon;
 
-    public ConvertToJson(String lang) {
+    public ConvertToJson(String lang, Boolean returnPolygon) {
         this.lang = lang;
+        this.returnPolygon = returnPolygon;
     }
 
     @Override
@@ -59,6 +64,25 @@ public class ConvertToJson implements OneWayConverter<SearchResponse, List<JSONO
                 final List<Double> nw = coords.get(0);
                 final List<Double> se = coords.get(1);
                 properties.put("extent", new JSONArray(Lists.newArrayList(nw.get(0), nw.get(1), se.get(0), se.get(1))));
+            }
+            
+            // add polygon of geometry
+            if(returnPolygon) {
+                
+                final Map<String, Object> polygon = (Map<String, Object>) source.get("polygon");
+                
+                if (polygon != null) {
+                    
+                    ArrayList<Double> alCoords = new ArrayList<>(); 
+                    ArrayList<HashMap<String,Double>> coords = (ArrayList<HashMap<String,Double>>) polygon.get("coordinates");
+                    
+                    for(HashMap<String, Double> coord : coords){
+                        alCoords.add(coord.get("lon"));
+                        alCoords.add(coord.get("lat"));
+                    }
+                    
+                    properties.put("polygon", new JSONArray(alCoords));
+                }
             }
 
             feature.put(Constants.PROPERTIES, properties);

@@ -18,7 +18,8 @@ public class ReverseRequestFactory {
     private final LanguageChecker languageChecker;
     private final static GeometryFactory geometryFactory = new GeometryFactory(new PrecisionModel(), 4326);
     
-    protected static HashSet<String> m_hsRequestQueryParams = new HashSet<>(Arrays.asList("lang", "lon", "lat", "radius", "query_string_filter", "distance_sort", "limit"));
+    protected static HashSet<String> m_hsRequestQueryParams = new HashSet<>(Arrays.asList("lang", "lon", "lat", "radius", "query_string_filter", "distance_sort",
+            "limit", "search_polygon", "return_polygon"));
 
     public ReverseRequestFactory(Set<String> supportedLanguages) {
         this.languageChecker = new LanguageChecker(supportedLanguages);
@@ -69,20 +70,10 @@ public class ReverseRequestFactory {
             }
         }
         
-        Boolean searchExtend = false;
-        try {
-            if(webRequest.queryParams("search_extend") == null)
-                searchExtend = false;
-            else
-                searchExtend = Boolean.valueOf(webRequest.queryParams("search_extend"));
-            
-        } catch (Exception nfe) {
-            //ignore
-        }
         
         Boolean searchPolygon = false;
         try {
-            if(webRequest.queryParams("searchPolygon") == null)
+            if(webRequest.queryParams("search_polygon") == null)
                 searchPolygon = false;
             else
                 searchPolygon = Boolean.valueOf(webRequest.queryParams("search_polygon"));
@@ -92,6 +83,16 @@ public class ReverseRequestFactory {
         }
         
         
+        Boolean returnPolygon = false;
+        try {
+            if(webRequest.queryParams("return_polygon") == null)
+                returnPolygon = false;
+            else
+                returnPolygon = Boolean.valueOf(webRequest.queryParams("return_polygon"));
+            
+        } catch (Exception nfe) {
+            //ignore
+        }
         
         
         String queryStringFilter = webRequest.queryParams("query_string_filter");
@@ -117,15 +118,13 @@ public class ReverseRequestFactory {
             }
             if(limit <= 0){
                 throw new BadRequestException(400, "invalid search term 'limit', expected a strictly positive integer.");
-            }else{
-                // limit number of results to 50
-                limit = Math.min(limit, 50);
             }
         }
         
                 
                 
-        ReverseRequest reverseRequest = new ReverseRequest(location, language, radius, searchExtend, searchPolygon, queryStringFilter, limit, locationDistanceSort);
+        ReverseRequest reverseRequest = new ReverseRequest(location, language, radius, searchPolygon, queryStringFilter, limit, locationDistanceSort, 
+                returnPolygon);
         
         return (R) reverseRequest;
     }
